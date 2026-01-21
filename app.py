@@ -9,14 +9,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 from data_functions import (
-    getMissionCountByCompany,
-    getSuccessRate,
-    getMissionsByDateRange,
-    getTopCompaniesByMissionCount,
-    getMissionStatusCount,
-    getMissionsByYear,
-    getMostUsedRocket,
-    getAverageMissionsPerYear
+    GetMissionCountByCompany,
+    GetSuccessRate,
+    GetMissionsByDateRange,
+    GetTopCompaniesByMissionCount,
+    GetMissionStatusCount,
+    GetMissionsByYear,
+    GetMostUsedRocket,
+    GetAverageMissionsPerYear
 )
 
 # Page configuration
@@ -159,9 +159,12 @@ st.markdown("""
         font-weight: 400;
     }
     
-    /* Hide Streamlit branding */
+    /* Hide Streamlit branding and header */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
     
     /* Data table - light theme */
     .stDataFrame {
@@ -205,12 +208,12 @@ def load_data():
 
 
 def create_logo():
-    """Create 3 overlapping circles logo with colors."""
+    """Create 3 overlapping circles logo with vibrant colors."""
     return """
     <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="35" cy="38" r="24" fill="rgba(74, 158, 255, 0.25)" stroke="#4a9eff" stroke-width="2"/>
-        <circle cx="65" cy="38" r="24" fill="rgba(255, 107, 107, 0.25)" stroke="#ff6b6b" stroke-width="2"/>
-        <circle cx="50" cy="62" r="24" fill="rgba(78, 205, 196, 0.25)" stroke="#4ecdc4" stroke-width="2"/>
+        <circle cx="35" cy="38" r="24" fill="rgba(74, 158, 255, 0.5)" stroke="#4a9eff" stroke-width="2.5"/>
+        <circle cx="65" cy="38" r="24" fill="rgba(255, 107, 107, 0.5)" stroke="#ff6b6b" stroke-width="2.5"/>
+        <circle cx="50" cy="62" r="24" fill="rgba(78, 205, 196, 0.5)" stroke="#4ecdc4" stroke-width="2.5"/>
     </svg>
     """
 
@@ -421,25 +424,25 @@ def main():
             color_discrete_map=status_colors
         )
         fig2.update_traces(
-            textposition='outside', 
-            textinfo='percent+label',
-            textfont=dict(size=11, color='#1d1d1f'),
+            textposition='inside', 
+            textinfo='percent',
+            textfont=dict(size=12, color='#ffffff'),
             marker=dict(line=dict(color='#ffffff', width=2))
         )
         fig2.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
             font=dict(color='#1d1d1f', size=12),
-            height=320,
-            margin=dict(l=20, r=20, t=20, b=40),
+            height=350,
+            margin=dict(l=20, r=20, t=20, b=60),
             showlegend=True,
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
-                y=-0.3,
+                y=-0.25,
                 xanchor="center",
                 x=0.5,
-                font=dict(size=11, color='#1d1d1f')
+                font=dict(size=12, color='#1d1d1f')
             )
         )
         st.plotly_chart(fig2, use_container_width=True)
@@ -599,24 +602,24 @@ def main():
     
     with stat_col1:
         st.markdown("<p class='stats-label'>Most Used Rocket</p>", unsafe_allow_html=True)
-        st.markdown(f"<p class='stats-value'>{getMostUsedRocket()}</p>", unsafe_allow_html=True)
+        st.markdown(f"<p class='stats-value'>{GetMostUsedRocket()}</p>", unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<p class='stats-label'>Mission Outcomes</p>", unsafe_allow_html=True)
-        status_dict = getMissionStatusCount()
+        status_dict = GetMissionStatusCount()
         for status, count in status_dict.items():
             st.markdown(f"<p class='stats-value'>{status}: {count:,}</p>", unsafe_allow_html=True)
     
     with stat_col2:
         st.markdown("<p class='stats-label'>Top 5 Organizations</p>", unsafe_allow_html=True)
-        top5 = getTopCompaniesByMissionCount(5)
+        top5 = GetTopCompaniesByMissionCount(5)
         for company, count in top5:
             st.markdown(f"<p class='stats-value'>{company}: {count:,}</p>", unsafe_allow_html=True)
     
     with stat_col3:
         st.markdown("<p class='stats-label'>Average Missions per Year</p>", unsafe_allow_html=True)
         for decade_start in range(1960, 2030, 10):
-            avg = getAverageMissionsPerYear(decade_start, decade_start + 9)
+            avg = GetAverageMissionsPerYear(decade_start, decade_start + 9)
             st.markdown(f"<p class='stats-value'>{decade_start}s: {avg:.1f}</p>", unsafe_allow_html=True)
 
 
