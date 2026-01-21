@@ -375,19 +375,23 @@ def main():
         fig1.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color=COLORS['secondary'], size=11),
+            font=dict(color='#1d1d1f', size=12),
             xaxis=dict(
-                gridcolor='rgba(0,0,0,0.05)', 
-                title='',
+                gridcolor='rgba(0,0,0,0.08)', 
+                title='Year',
+                titlefont=dict(color='#1d1d1f', size=12),
+                tickfont=dict(color='#1d1d1f', size=11),
                 linecolor=COLORS['border']
             ),
             yaxis=dict(
-                gridcolor='rgba(0,0,0,0.05)', 
-                title='',
+                gridcolor='rgba(0,0,0,0.08)', 
+                title='Missions',
+                titlefont=dict(color='#1d1d1f', size=12),
+                tickfont=dict(color='#1d1d1f', size=11),
                 linecolor=COLORS['border']
             ),
             height=320,
-            margin=dict(l=20, r=20, t=20, b=20),
+            margin=dict(l=20, r=20, t=20, b=40),
             showlegend=False
         )
         st.plotly_chart(fig1, use_container_width=True)
@@ -418,24 +422,24 @@ def main():
         )
         fig2.update_traces(
             textposition='outside', 
-            textinfo='percent',
-            textfont=dict(size=11, color=COLORS['secondary']),
+            textinfo='percent+label',
+            textfont=dict(size=11, color='#1d1d1f'),
             marker=dict(line=dict(color='#ffffff', width=2))
         )
         fig2.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color=COLORS['secondary'], size=11),
+            font=dict(color='#1d1d1f', size=12),
             height=320,
-            margin=dict(l=20, r=20, t=20, b=20),
+            margin=dict(l=20, r=20, t=20, b=40),
             showlegend=True,
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
-                y=-0.2,
+                y=-0.3,
                 xanchor="center",
                 x=0.5,
-                font=dict(size=10)
+                font=dict(size=11, color='#1d1d1f')
             )
         )
         st.plotly_chart(fig2, use_container_width=True)
@@ -464,19 +468,22 @@ def main():
         fig3.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color=COLORS['secondary'], size=11),
+            font=dict(color='#1d1d1f', size=12),
             xaxis=dict(
-                gridcolor='rgba(0,0,0,0.05)', 
-                title='',
+                gridcolor='rgba(0,0,0,0.08)', 
+                title='Number of Missions',
+                titlefont=dict(color='#1d1d1f', size=12),
+                tickfont=dict(color='#1d1d1f', size=11),
                 linecolor=COLORS['border']
             ),
             yaxis=dict(
                 gridcolor='rgba(0,0,0,0)', 
                 title='',
+                tickfont=dict(color='#1d1d1f', size=11),
                 linecolor='rgba(0,0,0,0)'
             ),
             height=350,
-            margin=dict(l=20, r=20, t=20, b=20)
+            margin=dict(l=20, r=20, t=20, b=40)
         )
         st.plotly_chart(fig3, use_container_width=True)
     
@@ -509,20 +516,23 @@ def main():
         fig4.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color=COLORS['secondary'], size=11),
+            font=dict(color='#1d1d1f', size=12),
             xaxis=dict(
-                gridcolor='rgba(0,0,0,0.05)', 
-                title='',
+                gridcolor='rgba(0,0,0,0.08)', 
+                title='Success Rate (%)',
+                titlefont=dict(color='#1d1d1f', size=12),
+                tickfont=dict(color='#1d1d1f', size=11),
                 range=[0, 100],
                 linecolor=COLORS['border']
             ),
             yaxis=dict(
                 gridcolor='rgba(0,0,0,0)', 
                 title='',
+                tickfont=dict(color='#1d1d1f', size=11),
                 linecolor='rgba(0,0,0,0)'
             ),
             height=350,
-            margin=dict(l=20, r=20, t=20, b=20)
+            margin=dict(l=20, r=20, t=20, b=40)
         )
         st.plotly_chart(fig4, use_container_width=True)
     
