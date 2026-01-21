@@ -23,7 +23,7 @@ def _load_data() -> pd.DataFrame:
     return _df
 
 
-def getMissionCountByCompany(companyName: str) -> int:
+def GetMissionCountByCompany(companyName: str) -> int:
     """
     Returns the total number of missions for a given company.
     
@@ -33,12 +33,15 @@ def getMissionCountByCompany(companyName: str) -> int:
     Returns:
         Integer representing the total number of missions
     """
+    if not companyName or not isinstance(companyName, str):
+        return 0
+    
     df = _load_data()
     count = len(df[df['Company'] == companyName])
     return int(count)
 
 
-def getSuccessRate(companyName: str) -> float:
+def GetSuccessRate(companyName: str) -> float:
     """
     Calculates the success rate for a given company as a percentage.
     
@@ -46,10 +49,13 @@ def getSuccessRate(companyName: str) -> float:
         companyName: Name of the company
     
     Returns:
-        Float representing success rate as a percentage (0-100), rounded to 2 decimal places.
+        Float representing success rate as a percentage (0-100), rounded to 5 decimal places.
         Only "Success" missions count as successful.
         Returns 0.0 if company has no missions.
     """
+    if not companyName or not isinstance(companyName, str):
+        return 0.0
+    
     df = _load_data()
     company_df = df[df['Company'] == companyName]
     
@@ -60,10 +66,10 @@ def getSuccessRate(companyName: str) -> float:
     successful_missions = len(company_df[company_df['MissionStatus'] == 'Success'])
     success_rate = (successful_missions / total_missions) * 100
     
-    return round(success_rate, 2)
+    return round(success_rate, 5)
 
 
-def getMissionsByDateRange(startDate: str, endDate: str) -> list:
+def GetMissionsByDateRange(startDate: str, endDate: str) -> list:
     """
     Returns a list of all mission names launched between startDate and endDate (inclusive).
     
@@ -74,21 +80,27 @@ def getMissionsByDateRange(startDate: str, endDate: str) -> list:
     Returns:
         List of strings containing mission names, sorted chronologically
     """
-    df = _load_data()
+    if not startDate or not endDate:
+        return []
     
-    # Convert string dates to datetime
-    start = pd.to_datetime(startDate)
-    end = pd.to_datetime(endDate)
-    
-    # Filter by date range (inclusive)
-    mask = (df['Date'] >= start) & (df['Date'] <= end)
-    filtered_df = df[mask].sort_values('Date')
-    
-    # Return list of mission names
-    return filtered_df['Mission'].tolist()
+    try:
+        df = _load_data()
+        
+        # Convert string dates to datetime
+        start = pd.to_datetime(startDate)
+        end = pd.to_datetime(endDate)
+        
+        # Filter by date range (inclusive)
+        mask = (df['Date'] >= start) & (df['Date'] <= end)
+        filtered_df = df[mask].sort_values('Date')
+        
+        # Return list of mission names
+        return filtered_df['Mission'].tolist()
+    except Exception:
+        return []
 
 
-def getTopCompaniesByMissionCount(n: int) -> list:
+def GetTopCompaniesByMissionCount(n: int) -> list:
     """
     Returns the top N companies ranked by total number of missions.
     
@@ -100,6 +112,9 @@ def getTopCompaniesByMissionCount(n: int) -> list:
         Sorted by mission count in descending order.
         If companies have the same count, sort alphabetically by company name.
     """
+    if not isinstance(n, int) or n <= 0:
+        return []
+    
     df = _load_data()
     
     # Count missions per company
@@ -122,7 +137,7 @@ def getTopCompaniesByMissionCount(n: int) -> list:
     return result
 
 
-def getMissionStatusCount() -> dict:
+def GetMissionStatusCount() -> dict:
     """
     Returns the count of missions for each mission status.
     
@@ -144,7 +159,7 @@ def getMissionStatusCount() -> dict:
     return result
 
 
-def getMissionsByYear(year: int) -> int:
+def GetMissionsByYear(year: int) -> int:
     """
     Returns the total number of missions launched in a specific year.
     
@@ -154,6 +169,9 @@ def getMissionsByYear(year: int) -> int:
     Returns:
         Integer representing the total number of missions in that year
     """
+    if not isinstance(year, int):
+        return 0
+    
     df = _load_data()
     
     # Extract year from Date column and filter
@@ -162,7 +180,7 @@ def getMissionsByYear(year: int) -> int:
     return int(len(missions_in_year))
 
 
-def getMostUsedRocket() -> str:
+def GetMostUsedRocket() -> str:
     """
     Returns the name of the rocket that has been used the most times.
     
@@ -187,7 +205,7 @@ def getMostUsedRocket() -> str:
     return top_rockets[0]
 
 
-def getAverageMissionsPerYear(startYear: int, endYear: int) -> float:
+def GetAverageMissionsPerYear(startYear: int, endYear: int) -> float:
     """
     Calculates the average number of missions per year over a given range.
     
@@ -196,51 +214,66 @@ def getAverageMissionsPerYear(startYear: int, endYear: int) -> float:
         endYear: Ending year (inclusive)
     
     Returns:
-        Float representing average missions per year, rounded to 2 decimal places
+        Float representing average missions per year, rounded to 5 decimal places
     """
+    if not isinstance(startYear, int) or not isinstance(endYear, int):
+        return 0.0
+    
+    if startYear > endYear:
+        return 0.0
+    
     df = _load_data()
     
     # Filter missions within the year range
     mask = (df['Date'].dt.year >= startYear) & (df['Date'].dt.year <= endYear)
     filtered_df = df[mask]
     
-    # Count missions per year
-    missions_per_year = filtered_df.groupby(filtered_df['Date'].dt.year).size()
-    
-    # Calculate average
-    if len(missions_per_year) == 0:
-        return 0.0
-    
-    # Calculate average over the number of years in the range (not just years with missions)
+    # Calculate average over the number of years in the range
     num_years = endYear - startYear + 1
     total_missions = len(filtered_df)
+    
+    if num_years == 0:
+        return 0.0
+    
     average = total_missions / num_years
     
-    return round(average, 2)
+    return round(average, 5)
+
+
+# Aliases with camelCase for backward compatibility (optional)
+getMissionCountByCompany = GetMissionCountByCompany
+getSuccessRate = GetSuccessRate
+getMissionsByDateRange = GetMissionsByDateRange
+getTopCompaniesByMissionCount = GetTopCompaniesByMissionCount
+getMissionStatusCount = GetMissionStatusCount
+getMissionsByYear = GetMissionsByYear
+getMostUsedRocket = GetMostUsedRocket
+getAverageMissionsPerYear = GetAverageMissionsPerYear
 
 
 # For testing purposes
 if __name__ == "__main__":
-    print("Testing Space Missions Data Functions")
-    print("=" * 50)
+    print("Testing Space Missions Data Functions (PascalCase)")
+    print("=" * 60)
     
-    print(f"\n1. getMissionCountByCompany('NASA'): {getMissionCountByCompany('NASA')}")
-    print(f"   getMissionCountByCompany('SpaceX'): {getMissionCountByCompany('SpaceX')}")
-    print(f"   getMissionCountByCompany('RVSN USSR'): {getMissionCountByCompany('RVSN USSR')}")
+    print(f"\n1. GetMissionCountByCompany('NASA'): {GetMissionCountByCompany('NASA')}")
+    print(f"   GetMissionCountByCompany('SpaceX'): {GetMissionCountByCompany('SpaceX')}")
+    print(f"   GetMissionCountByCompany('RVSN USSR'): {GetMissionCountByCompany('RVSN USSR')}")
+    print(f"   GetMissionCountByCompany(''): {GetMissionCountByCompany('')}")
     
-    print(f"\n2. getSuccessRate('NASA'): {getSuccessRate('NASA')}")
-    print(f"   getSuccessRate('SpaceX'): {getSuccessRate('SpaceX')}")
-    print(f"   getSuccessRate('NonExistentCompany'): {getSuccessRate('NonExistentCompany')}")
+    print(f"\n2. GetSuccessRate('NASA'): {GetSuccessRate('NASA')}")
+    print(f"   GetSuccessRate('SpaceX'): {GetSuccessRate('SpaceX')}")
+    print(f"   GetSuccessRate('NonExistentCompany'): {GetSuccessRate('NonExistentCompany')}")
     
-    print(f"\n3. getMissionsByDateRange('1957-10-01', '1957-12-31'): {getMissionsByDateRange('1957-10-01', '1957-12-31')}")
+    print(f"\n3. GetMissionsByDateRange('1957-10-01', '1957-12-31'): {GetMissionsByDateRange('1957-10-01', '1957-12-31')}")
     
-    print(f"\n4. getTopCompaniesByMissionCount(5): {getTopCompaniesByMissionCount(5)}")
+    print(f"\n4. GetTopCompaniesByMissionCount(5): {GetTopCompaniesByMissionCount(5)}")
     
-    print(f"\n5. getMissionStatusCount(): {getMissionStatusCount()}")
+    print(f"\n5. GetMissionStatusCount(): {GetMissionStatusCount()}")
     
-    print(f"\n6. getMissionsByYear(2020): {getMissionsByYear(2020)}")
-    print(f"   getMissionsByYear(1957): {getMissionsByYear(1957)}")
+    print(f"\n6. GetMissionsByYear(2020): {GetMissionsByYear(2020)}")
+    print(f"   GetMissionsByYear(1957): {GetMissionsByYear(1957)}")
     
-    print(f"\n7. getMostUsedRocket(): {getMostUsedRocket()}")
+    print(f"\n7. GetMostUsedRocket(): {GetMostUsedRocket()}")
     
-    print(f"\n8. getAverageMissionsPerYear(2010, 2020): {getAverageMissionsPerYear(2010, 2020)}")
+    print(f"\n8. GetAverageMissionsPerYear(2010, 2020): {GetAverageMissionsPerYear(2010, 2020)}")
