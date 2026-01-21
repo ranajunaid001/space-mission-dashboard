@@ -159,22 +159,25 @@ def load_data():
 
 
 def create_logo():
-    """Create minimal 3 overlapping circles logo."""
+    """Create 3 overlapping circles logo with colors."""
     return """
     <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="35" cy="38" r="24" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.6"/>
-        <circle cx="65" cy="38" r="24" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.6"/>
-        <circle cx="50" cy="62" r="24" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="35" cy="38" r="24" fill="rgba(74, 158, 255, 0.25)" stroke="#4a9eff" stroke-width="2"/>
+        <circle cx="65" cy="38" r="24" fill="rgba(255, 107, 107, 0.25)" stroke="#ff6b6b" stroke-width="2"/>
+        <circle cx="50" cy="62" r="24" fill="rgba(78, 205, 196, 0.25)" stroke="#4ecdc4" stroke-width="2"/>
     </svg>
     """
 
 
-# Minimal color palette
+# Minimal layout with vibrant colors
 COLORS = {
     'primary': '#1d1d1f',
     'secondary': '#86868b',
-    'accent': '#0071e3',
-    'success': '#34c759',
+    'accent': '#4a9eff',
+    'success': '#4ecdc4',
+    'failure': '#ff6b6b',
+    'warning': '#ffa94d',
+    'purple': '#845ef7',
     'background': '#fafafa',
     'card': '#ffffff',
     'border': '#e5e5e5'
@@ -320,8 +323,8 @@ def main():
             y='Missions'
         )
         fig1.update_traces(
-            line=dict(color=COLORS['primary'], width=1.5),
-            fillcolor='rgba(29, 29, 31, 0.05)'
+            line=dict(color=COLORS['accent'], width=2),
+            fillcolor='rgba(74, 158, 255, 0.15)'
         )
         fig1.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
@@ -351,15 +354,21 @@ def main():
         status_counts = filtered_df['MissionStatus'].value_counts().reset_index()
         status_counts.columns = ['Status', 'Count']
         
-        # Monochromatic colors
-        mono_colors = ['#1d1d1f', '#86868b', '#aeaeb2', '#d1d1d6']
+        # Vibrant colors for status
+        status_colors = {
+            'Success': '#4ecdc4',
+            'Failure': '#ff6b6b',
+            'Partial Failure': '#ffa94d',
+            'Prelaunch Failure': '#845ef7'
+        }
         
         fig2 = px.pie(
             status_counts, 
             values='Count', 
             names='Status',
-            hole=0.65,
-            color_discrete_sequence=mono_colors
+            hole=0.6,
+            color='Status',
+            color_discrete_map=status_colors
         )
         fig2.update_traces(
             textposition='outside', 
@@ -401,9 +410,11 @@ def main():
             top_companies,
             x='Missions',
             y='Company',
-            orientation='h'
+            orientation='h',
+            color='Missions',
+            color_continuous_scale=['#4a9eff', '#4ecdc4']
         )
-        fig3.update_traces(marker_color=COLORS['primary'])
+        fig3.update_layout(coloraxis_showscale=False)
         fig3.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
@@ -444,9 +455,11 @@ def main():
             success_df,
             x='Success Rate',
             y='Company',
-            orientation='h'
+            orientation='h',
+            color='Success Rate',
+            color_continuous_scale=['#ff6b6b', '#ffa94d', '#4ecdc4']
         )
-        fig4.update_traces(marker_color=COLORS['accent'])
+        fig4.update_layout(coloraxis_showscale=False)
         fig4.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
