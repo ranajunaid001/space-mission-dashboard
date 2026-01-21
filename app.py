@@ -1,6 +1,6 @@
 """
 Space Missions Dashboard
-Interactive dashboard to visualize and analyze historical space mission data from 1957 onwards.
+A minimalist, Jony Ive-inspired interface for exploring space mission data.
 """
 
 import streamlit as st
@@ -21,139 +21,128 @@ from data_functions import (
 
 # Page configuration
 st.set_page_config(
-    page_title="Space Missions Dashboard",
-    page_icon="🚀",
+    page_title="Space Missions",
+    page_icon="○",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for styling
+# Minimalist CSS - Jony Ive inspired
 st.markdown("""
 <style>
-    /* Main background and text */
+    /* Import clean font */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+    
+    /* Main background - clean white */
     .stApp {
-        background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #16213e 100%);
+        background: #fafafa;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     
-    /* Header styling */
-    .main-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 20px 0;
-        border-bottom: 2px solid #4a9eff;
-        margin-bottom: 30px;
+    /* Remove default padding */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
     }
     
-    .logo-container {
-        position: relative;
-        width: 70px;
-        height: 70px;
-    }
-    
-    .logo-circle {
-        position: absolute;
-        border-radius: 50%;
-        border: 3px solid;
-        opacity: 0.9;
-    }
-    
-    .circle-1 {
-        width: 45px;
-        height: 45px;
-        top: 0;
-        left: 5px;
-        border-color: #4a9eff;
-        background: rgba(74, 158, 255, 0.2);
-    }
-    
-    .circle-2 {
-        width: 45px;
-        height: 45px;
-        top: 15px;
-        left: 25px;
-        border-color: #ff6b6b;
-        background: rgba(255, 107, 107, 0.2);
-    }
-    
-    .circle-3 {
-        width: 45px;
-        height: 45px;
-        top: 25px;
-        left: 0;
-        border-color: #4ecdc4;
-        background: rgba(78, 205, 196, 0.2);
-    }
-    
+    /* Title styling */
     .title-text {
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(90deg, #4a9eff, #4ecdc4);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: 2rem;
+        font-weight: 600;
+        color: #1d1d1f;
         margin: 0;
+        letter-spacing: -0.5px;
     }
     
     .subtitle-text {
-        color: #888;
+        color: #86868b;
         font-size: 1rem;
-        margin: 5px 0 0 0;
+        font-weight: 400;
+        margin: 4px 0 0 0;
     }
     
-    /* Metric cards */
-    .metric-card {
-        background: linear-gradient(145deg, #1e1e3f 0%, #2a2a4a 100%);
-        border: 1px solid #3a3a5a;
-        border-radius: 15px;
-        padding: 20px;
+    /* Metric styling - ultra minimal */
+    .metric-container {
         text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        padding: 30px 20px;
     }
     
     .metric-value {
-        font-size: 2.2rem;
-        font-weight: 700;
-        color: #4a9eff;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #1d1d1f;
         margin: 0;
+        letter-spacing: -1px;
     }
     
     .metric-label {
-        font-size: 0.9rem;
-        color: #aaa;
-        margin-top: 5px;
-    }
-    
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-    }
-    
-    [data-testid="stSidebar"] .stMarkdown {
-        color: #e0e0e0;
-    }
-    
-    /* Chart containers */
-    .chart-container {
-        background: rgba(30, 30, 63, 0.5);
-        border: 1px solid #3a3a5a;
-        border-radius: 15px;
-        padding: 15px;
-        margin: 10px 0;
-    }
-    
-    /* Data table styling */
-    .dataframe {
         font-size: 0.85rem;
+        color: #86868b;
+        margin-top: 8px;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     /* Section headers */
     .section-header {
-        color: #4ecdc4;
-        font-size: 1.3rem;
+        color: #1d1d1f;
+        font-size: 1.25rem;
         font-weight: 600;
-        margin: 25px 0 15px 0;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #3a3a5a;
+        margin: 50px 0 25px 0;
+        letter-spacing: -0.3px;
+    }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background: #ffffff;
+        border-right: 1px solid #e5e5e5;
+    }
+    
+    [data-testid="stSidebar"] .stMarkdown {
+        color: #1d1d1f;
+    }
+    
+    /* Filter labels */
+    .filter-label {
+        font-size: 0.75rem;
+        color: #86868b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    
+    /* Clean divider */
+    .divider {
+        height: 1px;
+        background: #e5e5e5;
+        margin: 40px 0;
+    }
+    
+    /* Stats footer */
+    .stats-label {
+        font-size: 0.75rem;
+        color: #86868b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+    }
+    
+    .stats-value {
+        font-size: 1rem;
+        color: #1d1d1f;
+        font-weight: 400;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* Table styling */
+    .dataframe {
+        font-size: 0.85rem;
+        border: none !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -170,14 +159,26 @@ def load_data():
 
 
 def create_logo():
-    """Create the 3 overlapping circles logo."""
+    """Create minimal 3 overlapping circles logo."""
     return """
-    <div class="logo-container">
-        <div class="logo-circle circle-1"></div>
-        <div class="logo-circle circle-2"></div>
-        <div class="logo-circle circle-3"></div>
-    </div>
+    <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="35" cy="38" r="24" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="65" cy="38" r="24" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="50" cy="62" r="24" fill="none" stroke="#1d1d1f" stroke-width="1.5" opacity="0.6"/>
+    </svg>
     """
+
+
+# Minimal color palette
+COLORS = {
+    'primary': '#1d1d1f',
+    'secondary': '#86868b',
+    'accent': '#0071e3',
+    'success': '#34c759',
+    'background': '#fafafa',
+    'card': '#ffffff',
+    'border': '#e5e5e5'
+}
 
 
 def main():
@@ -185,52 +186,59 @@ def main():
     df = load_data()
     
     # Header with logo
-    st.markdown(f"""
-    <div class="main-header">
-        {create_logo()}
-        <div>
-            <h1 class="title-text">Space Missions Dashboard</h1>
-            <p class="subtitle-text">Exploring {len(df):,} missions from 1957 to 2022</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    col_logo, col_title = st.columns([0.5, 5])
     
-    # Sidebar filters
-    st.sidebar.markdown("## 🎛️ Filters")
+    with col_logo:
+        st.markdown(create_logo(), unsafe_allow_html=True)
     
-    # Date range filter
-    st.sidebar.markdown("### 📅 Date Range")
+    with col_title:
+        st.markdown("<h1 class='title-text'>Space Missions</h1>", unsafe_allow_html=True)
+        st.markdown(f"<p class='subtitle-text'>{len(df):,} missions from 1957–2022</p>", unsafe_allow_html=True)
+    
+    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+    
+    # Sidebar filters - minimal
+    st.sidebar.markdown("<p class='filter-label'>Filters</p>", unsafe_allow_html=True)
+    st.sidebar.markdown("---")
+    
+    # Date range
+    st.sidebar.markdown("<p class='filter-label'>Date Range</p>", unsafe_allow_html=True)
     min_date = df['Date'].min().date()
     max_date = df['Date'].max().date()
     
     date_range = st.sidebar.date_input(
-        "Select date range",
+        "Date range",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
-        key="date_range"
+        label_visibility="collapsed"
     )
     
-    # Handle single date selection
     if len(date_range) == 2:
         start_date, end_date = date_range
     else:
         start_date = end_date = date_range[0]
     
+    st.sidebar.markdown("<br>", unsafe_allow_html=True)
+    
     # Company filter
-    st.sidebar.markdown("### 🏢 Company")
-    companies = ['All'] + sorted(df['Company'].unique().tolist())
-    selected_company = st.sidebar.selectbox("Select company", companies)
+    st.sidebar.markdown("<p class='filter-label'>Company</p>", unsafe_allow_html=True)
+    companies = ['All Companies'] + sorted(df['Company'].unique().tolist())
+    selected_company = st.sidebar.selectbox("Company", companies, label_visibility="collapsed")
+    
+    st.sidebar.markdown("<br>", unsafe_allow_html=True)
     
     # Mission status filter
-    st.sidebar.markdown("### 🎯 Mission Status")
-    statuses = ['All'] + sorted(df['MissionStatus'].unique().tolist())
-    selected_status = st.sidebar.selectbox("Select status", statuses)
+    st.sidebar.markdown("<p class='filter-label'>Mission Status</p>", unsafe_allow_html=True)
+    statuses = ['All Statuses'] + sorted(df['MissionStatus'].unique().tolist())
+    selected_status = st.sidebar.selectbox("Status", statuses, label_visibility="collapsed")
+    
+    st.sidebar.markdown("<br>", unsafe_allow_html=True)
     
     # Rocket status filter
-    st.sidebar.markdown("### 🚀 Rocket Status")
+    st.sidebar.markdown("<p class='filter-label'>Rocket Status</p>", unsafe_allow_html=True)
     rocket_statuses = ['All'] + sorted(df['RocketStatus'].unique().tolist())
-    selected_rocket_status = st.sidebar.selectbox("Select rocket status", rocket_statuses)
+    selected_rocket_status = st.sidebar.selectbox("Rocket Status", rocket_statuses, label_visibility="collapsed")
     
     # Apply filters
     filtered_df = df.copy()
@@ -239,33 +247,32 @@ def main():
         (filtered_df['Date'].dt.date <= end_date)
     ]
     
-    if selected_company != 'All':
+    if selected_company != 'All Companies':
         filtered_df = filtered_df[filtered_df['Company'] == selected_company]
     
-    if selected_status != 'All':
+    if selected_status != 'All Statuses':
         filtered_df = filtered_df[filtered_df['MissionStatus'] == selected_status]
     
     if selected_rocket_status != 'All':
         filtered_df = filtered_df[filtered_df['RocketStatus'] == selected_rocket_status]
     
-    # Summary Statistics
-    st.markdown('<p class="section-header">📊 Summary Statistics</p>', unsafe_allow_html=True)
-    
+    # Summary Statistics - minimal cards
     col1, col2, col3, col4, col5 = st.columns(5)
+    
+    success_count = len(filtered_df[filtered_df['MissionStatus'] == 'Success'])
+    success_rate = (success_count / len(filtered_df) * 100) if len(filtered_df) > 0 else 0
     
     with col1:
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-container">
             <p class="metric-value">{len(filtered_df):,}</p>
-            <p class="metric-label">Total Missions</p>
+            <p class="metric-label">Missions</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col2:
-        success_count = len(filtered_df[filtered_df['MissionStatus'] == 'Success'])
-        success_rate = (success_count / len(filtered_df) * 100) if len(filtered_df) > 0 else 0
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-container">
             <p class="metric-value">{success_rate:.1f}%</p>
             <p class="metric-label">Success Rate</p>
         </div>
@@ -273,7 +280,7 @@ def main():
     
     with col3:
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-container">
             <p class="metric-value">{filtered_df['Company'].nunique()}</p>
             <p class="metric-label">Companies</p>
         </div>
@@ -281,110 +288,110 @@ def main():
     
     with col4:
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-container">
             <p class="metric-value">{filtered_df['Rocket'].nunique()}</p>
-            <p class="metric-label">Rocket Types</p>
+            <p class="metric-label">Rockets</p>
         </div>
         """, unsafe_allow_html=True)
     
     with col5:
         st.markdown(f"""
-        <div class="metric-card">
+        <div class="metric-container">
             <p class="metric-value">{filtered_df['Location'].nunique()}</p>
             <p class="metric-label">Launch Sites</p>
         </div>
         """, unsafe_allow_html=True)
     
-    # Visualizations
-    st.markdown('<p class="section-header">📈 Visualizations</p>', unsafe_allow_html=True)
+    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
     
-    # Row 1: Two charts side by side
+    # Visualizations - clean and minimal
     chart_col1, chart_col2 = st.columns(2)
     
     with chart_col1:
         # Visualization 1: Missions Over Time
-        st.markdown("#### 🕐 Missions Over Time")
-        st.markdown("""
-        <small style="color: #888;">
-        <b>Why this visualization:</b> A line chart reveals temporal trends in space exploration activity, 
-        showing the Space Race peak, post-Cold War decline, and recent commercial space boom.
-        </small>
-        """, unsafe_allow_html=True)
+        st.markdown("<p class='section-header'>Missions Over Time</p>", unsafe_allow_html=True)
+        st.caption("Annual launch frequency showing historical trends in space exploration activity.")
         
         yearly_missions = filtered_df.groupby('Year').size().reset_index(name='Missions')
         
-        fig1 = px.line(
+        fig1 = px.area(
             yearly_missions, 
             x='Year', 
-            y='Missions',
-            markers=True
+            y='Missions'
         )
         fig1.update_traces(
-            line=dict(color='#4a9eff', width=2),
-            marker=dict(size=6, color='#4ecdc4')
+            line=dict(color=COLORS['primary'], width=1.5),
+            fillcolor='rgba(29, 29, 31, 0.05)'
         )
         fig1.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e0e0e0'),
-            xaxis=dict(gridcolor='rgba(255,255,255,0.1)', title='Year'),
-            yaxis=dict(gridcolor='rgba(255,255,255,0.1)', title='Number of Missions'),
-            height=350,
-            margin=dict(l=40, r=40, t=40, b=40)
+            font=dict(color=COLORS['secondary'], size=11),
+            xaxis=dict(
+                gridcolor='rgba(0,0,0,0.05)', 
+                title='',
+                linecolor=COLORS['border']
+            ),
+            yaxis=dict(
+                gridcolor='rgba(0,0,0,0.05)', 
+                title='',
+                linecolor=COLORS['border']
+            ),
+            height=320,
+            margin=dict(l=20, r=20, t=20, b=20),
+            showlegend=False
         )
         st.plotly_chart(fig1, use_container_width=True)
     
     with chart_col2:
         # Visualization 2: Mission Status Distribution
-        st.markdown("#### 🎯 Mission Status Distribution")
-        st.markdown("""
-        <small style="color: #888;">
-        <b>Why this visualization:</b> A donut chart provides an immediate visual breakdown of mission outcomes, 
-        highlighting the overall reliability of space missions and identifying failure patterns.
-        </small>
-        """, unsafe_allow_html=True)
+        st.markdown("<p class='section-header'>Mission Outcomes</p>", unsafe_allow_html=True)
+        st.caption("Distribution of mission results across all launches.")
         
         status_counts = filtered_df['MissionStatus'].value_counts().reset_index()
         status_counts.columns = ['Status', 'Count']
         
-        colors = {
-            'Success': '#4ecdc4',
-            'Failure': '#ff6b6b',
-            'Partial Failure': '#ffa94d',
-            'Prelaunch Failure': '#845ef7'
-        }
+        # Monochromatic colors
+        mono_colors = ['#1d1d1f', '#86868b', '#aeaeb2', '#d1d1d6']
         
         fig2 = px.pie(
             status_counts, 
             values='Count', 
             names='Status',
-            hole=0.5,
-            color='Status',
-            color_discrete_map=colors
+            hole=0.65,
+            color_discrete_sequence=mono_colors
         )
-        fig2.update_traces(textposition='outside', textinfo='percent+label')
+        fig2.update_traces(
+            textposition='outside', 
+            textinfo='percent',
+            textfont=dict(size=11, color=COLORS['secondary']),
+            marker=dict(line=dict(color='#ffffff', width=2))
+        )
         fig2.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e0e0e0'),
-            height=350,
-            margin=dict(l=40, r=40, t=40, b=40),
-            showlegend=False
+            font=dict(color=COLORS['secondary'], size=11),
+            height=320,
+            margin=dict(l=20, r=20, t=20, b=20),
+            showlegend=True,
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=-0.2,
+                xanchor="center",
+                x=0.5,
+                font=dict(size=10)
+            )
         )
         st.plotly_chart(fig2, use_container_width=True)
     
-    # Row 2: Two more charts
+    # Row 2: More visualizations
     chart_col3, chart_col4 = st.columns(2)
     
     with chart_col3:
-        # Visualization 3: Top Companies by Mission Count
-        st.markdown("#### 🏆 Top 10 Companies by Missions")
-        st.markdown("""
-        <small style="color: #888;">
-        <b>Why this visualization:</b> A horizontal bar chart ranks organizations by launch activity, 
-        revealing which entities have dominated space exploration throughout history.
-        </small>
-        """, unsafe_allow_html=True)
+        # Visualization 3: Top Companies
+        st.markdown("<p class='section-header'>Leading Organizations</p>", unsafe_allow_html=True)
+        st.caption("Top 10 companies by total number of launches.")
         
         top_companies = filtered_df['Company'].value_counts().head(10).reset_index()
         top_companies.columns = ['Company', 'Missions']
@@ -394,33 +401,33 @@ def main():
             top_companies,
             x='Missions',
             y='Company',
-            orientation='h',
-            color='Missions',
-            color_continuous_scale=['#1a1a3e', '#4a9eff', '#4ecdc4']
+            orientation='h'
         )
+        fig3.update_traces(marker_color=COLORS['primary'])
         fig3.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e0e0e0'),
-            xaxis=dict(gridcolor='rgba(255,255,255,0.1)', title='Number of Missions'),
-            yaxis=dict(gridcolor='rgba(255,255,255,0.1)', title=''),
-            height=400,
-            margin=dict(l=40, r=40, t=40, b=40),
-            coloraxis_showscale=False
+            font=dict(color=COLORS['secondary'], size=11),
+            xaxis=dict(
+                gridcolor='rgba(0,0,0,0.05)', 
+                title='',
+                linecolor=COLORS['border']
+            ),
+            yaxis=dict(
+                gridcolor='rgba(0,0,0,0)', 
+                title='',
+                linecolor='rgba(0,0,0,0)'
+            ),
+            height=350,
+            margin=dict(l=20, r=20, t=20, b=20)
         )
         st.plotly_chart(fig3, use_container_width=True)
     
     with chart_col4:
-        # Visualization 4: Success Rate by Top Companies
-        st.markdown("#### 📊 Success Rate by Top Companies")
-        st.markdown("""
-        <small style="color: #888;">
-        <b>Why this visualization:</b> A bar chart comparing success rates reveals which organizations 
-        have the most reliable track records, beyond just volume of launches.
-        </small>
-        """, unsafe_allow_html=True)
+        # Visualization 4: Success Rate by Company
+        st.markdown("<p class='section-header'>Success Rate by Company</p>", unsafe_allow_html=True)
+        st.caption("Reliability comparison of top 10 launch providers.")
         
-        # Get top 10 companies by mission count
         top_10_companies = filtered_df['Company'].value_counts().head(10).index.tolist()
         
         success_rates = []
@@ -429,7 +436,7 @@ def main():
             total = len(company_df)
             success = len(company_df[company_df['MissionStatus'] == 'Success'])
             rate = (success / total * 100) if total > 0 else 0
-            success_rates.append({'Company': company, 'Success Rate': rate, 'Total Missions': total})
+            success_rates.append({'Company': company, 'Success Rate': rate})
         
         success_df = pd.DataFrame(success_rates).sort_values('Success Rate', ascending=True)
         
@@ -437,37 +444,45 @@ def main():
             success_df,
             x='Success Rate',
             y='Company',
-            orientation='h',
-            color='Success Rate',
-            color_continuous_scale=['#ff6b6b', '#ffa94d', '#4ecdc4'],
-            hover_data=['Total Missions']
+            orientation='h'
         )
+        fig4.update_traces(marker_color=COLORS['accent'])
         fig4.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#e0e0e0'),
-            xaxis=dict(gridcolor='rgba(255,255,255,0.1)', title='Success Rate (%)', range=[0, 100]),
-            yaxis=dict(gridcolor='rgba(255,255,255,0.1)', title=''),
-            height=400,
-            margin=dict(l=40, r=40, t=40, b=40),
-            coloraxis_showscale=False
+            font=dict(color=COLORS['secondary'], size=11),
+            xaxis=dict(
+                gridcolor='rgba(0,0,0,0.05)', 
+                title='',
+                range=[0, 100],
+                linecolor=COLORS['border']
+            ),
+            yaxis=dict(
+                gridcolor='rgba(0,0,0,0)', 
+                title='',
+                linecolor='rgba(0,0,0,0)'
+            ),
+            height=350,
+            margin=dict(l=20, r=20, t=20, b=20)
         )
         st.plotly_chart(fig4, use_container_width=True)
     
-    # Data Table Section
-    st.markdown('<p class="section-header">📋 Mission Data Table</p>', unsafe_allow_html=True)
+    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
     
-    # Table controls
-    table_col1, table_col2, table_col3 = st.columns([2, 2, 2])
+    # Data Table - minimal
+    st.markdown("<p class='section-header'>Mission Data</p>", unsafe_allow_html=True)
     
-    with table_col1:
-        search_term = st.text_input("🔍 Search missions", placeholder="Enter mission name...")
+    # Simple search and sort
+    col_search, col_sort, col_order = st.columns([3, 2, 2])
     
-    with table_col2:
-        sort_by = st.selectbox("Sort by", ['Date', 'Company', 'Mission', 'Rocket', 'MissionStatus'])
+    with col_search:
+        search_term = st.text_input("Search", placeholder="Search missions...", label_visibility="collapsed")
     
-    with table_col3:
-        sort_order = st.radio("Order", ['Descending', 'Ascending'], horizontal=True)
+    with col_sort:
+        sort_by = st.selectbox("Sort", ['Date', 'Company', 'Mission', 'Rocket', 'MissionStatus'], label_visibility="collapsed")
+    
+    with col_order:
+        sort_order = st.selectbox("Order", ['Newest First', 'Oldest First'], label_visibility="collapsed")
     
     # Apply search and sorting
     display_df = filtered_df.copy()
@@ -479,10 +494,10 @@ def main():
             display_df['Rocket'].str.contains(search_term, case=False, na=False)
         ]
     
-    ascending = sort_order == 'Ascending'
+    ascending = sort_order == 'Oldest First'
     display_df = display_df.sort_values(sort_by, ascending=ascending)
     
-    # Select columns to display
+    # Select columns
     display_columns = ['Date', 'Company', 'Mission', 'Rocket', 'Location', 'MissionStatus', 'RocketStatus', 'Price']
     display_df_final = display_df[display_columns].copy()
     display_df_final['Date'] = display_df_final['Date'].dt.strftime('%Y-%m-%d')
@@ -499,38 +514,41 @@ def main():
             "Rocket": st.column_config.TextColumn("Rocket", width="medium"),
             "Location": st.column_config.TextColumn("Location", width="large"),
             "MissionStatus": st.column_config.TextColumn("Status", width="small"),
-            "RocketStatus": st.column_config.TextColumn("Rocket Status", width="small"),
-            "Price": st.column_config.NumberColumn("Price (M$)", width="small", format="%.2f")
+            "RocketStatus": st.column_config.TextColumn("Rocket", width="small"),
+            "Price": st.column_config.NumberColumn("Price ($M)", width="small", format="%.1f")
         }
     )
     
-    st.markdown(f"<p style='color: #888; font-size: 0.85rem;'>Showing {len(display_df_final):,} of {len(filtered_df):,} filtered missions</p>", unsafe_allow_html=True)
+    st.caption(f"Showing {len(display_df_final):,} of {len(filtered_df):,} missions")
     
-    # Footer with additional stats using the required functions
-    st.markdown('<p class="section-header">🔢 Quick Stats (Using Required Functions)</p>', unsafe_allow_html=True)
+    st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
     
-    func_col1, func_col2, func_col3 = st.columns(3)
+    # Quick Stats footer - minimal
+    st.markdown("<p class='section-header'>Quick Reference</p>", unsafe_allow_html=True)
     
-    with func_col1:
-        st.markdown("**Most Used Rocket:**")
-        st.code(getMostUsedRocket())
+    stat_col1, stat_col2, stat_col3 = st.columns(3)
+    
+    with stat_col1:
+        st.markdown("<p class='stats-label'>Most Used Rocket</p>", unsafe_allow_html=True)
+        st.markdown(f"<p class='stats-value'>{getMostUsedRocket()}</p>", unsafe_allow_html=True)
         
-        st.markdown("**Status Counts:**")
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<p class='stats-label'>Mission Outcomes</p>", unsafe_allow_html=True)
         status_dict = getMissionStatusCount()
         for status, count in status_dict.items():
-            st.markdown(f"- {status}: {count:,}")
+            st.markdown(f"<p class='stats-value'>{status}: {count:,}</p>", unsafe_allow_html=True)
     
-    with func_col2:
-        st.markdown("**Top 5 Companies:**")
+    with stat_col2:
+        st.markdown("<p class='stats-label'>Top 5 Organizations</p>", unsafe_allow_html=True)
         top5 = getTopCompaniesByMissionCount(5)
         for company, count in top5:
-            st.markdown(f"- {company}: {count:,}")
+            st.markdown(f"<p class='stats-value'>{company}: {count:,}</p>", unsafe_allow_html=True)
     
-    with func_col3:
-        st.markdown("**Missions by Decade:**")
+    with stat_col3:
+        st.markdown("<p class='stats-label'>Average Missions per Year</p>", unsafe_allow_html=True)
         for decade_start in range(1960, 2030, 10):
             avg = getAverageMissionsPerYear(decade_start, decade_start + 9)
-            st.markdown(f"- {decade_start}s: {avg:.1f} avg/year")
+            st.markdown(f"<p class='stats-value'>{decade_start}s: {avg:.1f}</p>", unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
