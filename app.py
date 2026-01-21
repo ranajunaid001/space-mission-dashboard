@@ -252,8 +252,23 @@ def main():
     # Sidebar filters - minimal
     st.sidebar.markdown("<p class='filter-label'>Filters</p>", unsafe_allow_html=True)
     
-    # Reset button
-    if st.sidebar.button("🔄 Reset All Filters", use_container_width=True):
+    # Reset button with subtle styling
+    st.sidebar.markdown("""
+        <style>
+        div[data-testid="stSidebar"] button[kind="secondary"] {
+            background-color: #f0f0f0 !important;
+            color: #666666 !important;
+            border: 1px solid #e0e0e0 !important;
+            font-weight: 400 !important;
+        }
+        div[data-testid="stSidebar"] button[kind="secondary"]:hover {
+            background-color: #e5e5e5 !important;
+            border: 1px solid #d0d0d0 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    if st.sidebar.button("Reset", use_container_width=True):
         st.rerun()
     
     st.sidebar.markdown("---")
