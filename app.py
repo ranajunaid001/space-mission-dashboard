@@ -27,38 +27,72 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Minimalist CSS - Jony Ive inspired
+# Minimalist CSS - Light theme with colors
 st.markdown("""
 <style>
     /* Import clean font */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
     
-    /* Main background - clean white */
+    /* Force light theme on everything */
     .stApp {
-        background: #fafafa;
+        background-color: #fafafa !important;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    /* Header area - force light */
+    header[data-testid="stHeader"] {
+        background-color: #fafafa !important;
+    }
+    
+    /* Sidebar - light theme */
+    [data-testid="stSidebar"] {
+        background-color: #f5f5f7 !important;
+        border-right: 1px solid #e5e5e5;
+    }
+    
+    [data-testid="stSidebar"] > div:first-child {
+        background-color: #f5f5f7 !important;
+    }
+    
+    [data-testid="stSidebar"] .stMarkdown {
+        color: #1d1d1f !important;
+    }
+    
+    [data-testid="stSidebar"] label {
+        color: #1d1d1f !important;
+    }
+    
+    [data-testid="stSidebar"] .stSelectbox label,
+    [data-testid="stSidebar"] .stDateInput label {
+        color: #1d1d1f !important;
+    }
+    
+    /* Sidebar select boxes */
+    [data-testid="stSidebar"] .stSelectbox > div > div {
+        background-color: #ffffff !important;
+        border: 1px solid #d1d1d6 !important;
+        color: #1d1d1f !important;
+    }
+    
+    [data-testid="stSidebar"] .stDateInput > div > div > input {
+        background-color: #ffffff !important;
+        border: 1px solid #d1d1d6 !important;
+        color: #1d1d1f !important;
+    }
+    
+    /* Main content text */
+    .stMarkdown, .stText, p, span, label {
+        color: #1d1d1f !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        color: #1d1d1f !important;
     }
     
     /* Remove default padding */
     .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
-    }
-    
-    /* Title styling */
-    .title-text {
-        font-size: 2.2rem;
-        font-weight: 600;
-        color: #1d1d1f !important;
-        margin: 0;
-        letter-spacing: -0.5px;
-    }
-    
-    .subtitle-text {
-        color: #86868b !important;
-        font-size: 1rem;
-        font-weight: 400;
-        margin: 4px 0 0 0;
     }
     
     /* Metric styling - ultra minimal */
@@ -70,14 +104,14 @@ st.markdown("""
     .metric-value {
         font-size: 2.5rem;
         font-weight: 600;
-        color: #1d1d1f;
+        color: #1d1d1f !important;
         margin: 0;
         letter-spacing: -1px;
     }
     
     .metric-label {
         font-size: 0.85rem;
-        color: #86868b;
+        color: #86868b !important;
         margin-top: 8px;
         font-weight: 400;
         text-transform: uppercase;
@@ -86,27 +120,17 @@ st.markdown("""
     
     /* Section headers */
     .section-header {
-        color: #1d1d1f;
+        color: #1d1d1f !important;
         font-size: 1.25rem;
         font-weight: 600;
         margin: 50px 0 25px 0;
         letter-spacing: -0.3px;
     }
     
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background: #ffffff;
-        border-right: 1px solid #e5e5e5;
-    }
-    
-    [data-testid="stSidebar"] .stMarkdown {
-        color: #1d1d1f;
-    }
-    
     /* Filter labels */
     .filter-label {
         font-size: 0.75rem;
-        color: #86868b;
+        color: #86868b !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         margin-bottom: 8px;
@@ -123,7 +147,7 @@ st.markdown("""
     /* Stats footer */
     .stats-label {
         font-size: 0.75rem;
-        color: #86868b;
+        color: #86868b !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 500;
@@ -131,7 +155,7 @@ st.markdown("""
     
     .stats-value {
         font-size: 1rem;
-        color: #1d1d1f;
+        color: #1d1d1f !important;
         font-weight: 400;
     }
     
@@ -139,10 +163,32 @@ st.markdown("""
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     
-    /* Table styling */
-    .dataframe {
-        font-size: 0.85rem;
-        border: none !important;
+    /* Data table - light theme */
+    .stDataFrame {
+        background-color: #ffffff !important;
+    }
+    
+    [data-testid="stDataFrame"] {
+        background-color: #ffffff !important;
+    }
+    
+    /* Search input */
+    .stTextInput input {
+        background-color: #ffffff !important;
+        border: 1px solid #d1d1d6 !important;
+        color: #1d1d1f !important;
+    }
+    
+    /* Select boxes in main area */
+    .stSelectbox > div > div {
+        background-color: #ffffff !important;
+        border: 1px solid #d1d1d6 !important;
+        color: #1d1d1f !important;
+    }
+    
+    /* Captions */
+    .stCaption {
+        color: #86868b !important;
     }
 </style>
 """, unsafe_allow_html=True)
