@@ -47,15 +47,15 @@ st.markdown("""
     
     /* Title styling */
     .title-text {
-        font-size: 2rem;
+        font-size: 2.2rem;
         font-weight: 600;
-        color: #1d1d1f;
+        color: #1d1d1f !important;
         margin: 0;
         letter-spacing: -0.5px;
     }
     
     .subtitle-text {
-        color: #86868b;
+        color: #86868b !important;
         font-size: 1rem;
         font-weight: 400;
         margin: 4px 0 0 0;
@@ -195,8 +195,8 @@ def main():
         st.markdown(create_logo(), unsafe_allow_html=True)
     
     with col_title:
-        st.markdown("<h1 class='title-text'>Space Missions</h1>", unsafe_allow_html=True)
-        st.markdown(f"<p class='subtitle-text'>{len(df):,} missions from 1957–2022</p>", unsafe_allow_html=True)
+        st.title("Space Missions")
+        st.caption(f"{len(df):,} missions from 1957–2022")
     
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
     
