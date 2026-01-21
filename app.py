@@ -251,6 +251,11 @@ def main():
     
     # Sidebar filters - minimal
     st.sidebar.markdown("<p class='filter-label'>Filters</p>", unsafe_allow_html=True)
+    
+    # Reset button
+    if st.sidebar.button("🔄 Reset All Filters", use_container_width=True):
+        st.rerun()
+    
     st.sidebar.markdown("---")
     
     # Date range
@@ -266,10 +271,14 @@ def main():
         label_visibility="collapsed"
     )
     
+    # Handle incomplete date selection
     if len(date_range) == 2:
         start_date, end_date = date_range
     else:
-        start_date = end_date = date_range[0]
+        # If only one date selected, use full range to avoid errors
+        start_date = min_date
+        end_date = max_date
+        st.sidebar.caption("⚠️ Select both dates for range filter")
     
     st.sidebar.markdown("<br>", unsafe_allow_html=True)
     
@@ -497,47 +506,50 @@ def main():
         
         top_10_companies = filtered_df['Company'].value_counts().head(10).index.tolist()
         
-        success_rates = []
-        for company in top_10_companies:
-            company_df = filtered_df[filtered_df['Company'] == company]
-            total = len(company_df)
-            success = len(company_df[company_df['MissionStatus'] == 'Success'])
-            rate = (success / total * 100) if total > 0 else 0
-            success_rates.append({'Company': company, 'Success Rate': rate})
-        
-        success_df = pd.DataFrame(success_rates).sort_values('Success Rate', ascending=True)
-        
-        fig4 = px.bar(
-            success_df,
-            x='Success Rate',
-            y='Company',
-            orientation='h',
-            color='Success Rate',
-            color_continuous_scale=['#ff6b6b', '#ffa94d', '#4ecdc4']
-        )
-        fig4.update_layout(coloraxis_showscale=False)
-        fig4.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1d1d1f', size=12),
-            xaxis=dict(
-                gridcolor='rgba(0,0,0,0.08)', 
-                title='Success Rate (%)',
-                titlefont=dict(color='#1d1d1f', size=12),
-                tickfont=dict(color='#1d1d1f', size=11),
-                range=[0, 100],
-                linecolor=COLORS['border']
-            ),
-            yaxis=dict(
-                gridcolor='rgba(0,0,0,0)', 
-                title='',
-                tickfont=dict(color='#1d1d1f', size=11),
-                linecolor='rgba(0,0,0,0)'
-            ),
-            height=350,
-            margin=dict(l=20, r=20, t=20, b=40)
-        )
-        st.plotly_chart(fig4, use_container_width=True)
+        if len(top_10_companies) > 0:
+            success_rates = []
+            for company in top_10_companies:
+                company_df = filtered_df[filtered_df['Company'] == company]
+                total = len(company_df)
+                success = len(company_df[company_df['MissionStatus'] == 'Success'])
+                rate = (success / total * 100) if total > 0 else 0
+                success_rates.append({'Company': company, 'Success Rate': rate})
+            
+            success_df = pd.DataFrame(success_rates).sort_values('Success Rate', ascending=True)
+            
+            fig4 = px.bar(
+                success_df,
+                x='Success Rate',
+                y='Company',
+                orientation='h',
+                color='Success Rate',
+                color_continuous_scale=['#ff6b6b', '#ffa94d', '#4ecdc4']
+            )
+            fig4.update_layout(coloraxis_showscale=False)
+            fig4.update_layout(
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#1d1d1f', size=12),
+                xaxis=dict(
+                    gridcolor='rgba(0,0,0,0.08)', 
+                    title='Success Rate (%)',
+                    titlefont=dict(color='#1d1d1f', size=12),
+                    tickfont=dict(color='#1d1d1f', size=11),
+                    range=[0, 100],
+                    linecolor=COLORS['border']
+                ),
+                yaxis=dict(
+                    gridcolor='rgba(0,0,0,0)', 
+                    title='',
+                    tickfont=dict(color='#1d1d1f', size=11),
+                    linecolor='rgba(0,0,0,0)'
+                ),
+                height=350,
+                margin=dict(l=20, r=20, t=20, b=40)
+            )
+            st.plotly_chart(fig4, use_container_width=True)
+        else:
+            st.info("No data available for the selected filters.")
     
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
     
